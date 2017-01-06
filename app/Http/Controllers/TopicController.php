@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Topic;
 use App\Post;
 use Illuminate\Http\Request;
+use App\Transformers\TopicTransformer;
 use App\Http\Requests\StoreTopicRequest;
 
 class TopicController extends Controller
@@ -21,6 +22,13 @@ class TopicController extends Controller
 
         $topic->save();
         $topic->posts()->save($post);
+
+        return fractal()
+              ->item($topic)
+            //   ->parseIncludes(['user', 'posts', 'posts.user'])
+              ->parseIncludes(['user'])
+              ->transformWith(new TopicTransformer)
+              ->toArray();
 
     }
 
