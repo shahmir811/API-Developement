@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Topic;
 use App\Post;
+use App\Topic;
 use Illuminate\Http\Request;
 use App\Transformers\TopicTransformer;
 use App\Http\Requests\StoreTopicRequest;
+use App\Http\Requests\UpdateTopicRequest;
 use League\Fractal\Pagination\IlluminatePaginatorAdapter;
 
 class TopicController extends Controller
@@ -55,9 +56,18 @@ class TopicController extends Controller
 
     }
 
-    public function update()
+    public function update(UpdateTopicRequest $request, Topic $topic)
     {
+        $this->authorize('update', $topic);
 
+        $topic->title = $request->get('title', $topic->title); //Take the updated title, otherwise store the old title
+        $topic->save();
+
+        return fractal()
+              ->item($topic)
+              ->parseIncludes(['user'])
+              ->transformWith(new TopicTransformer)
+              ->toArray();
     }
 
 }
