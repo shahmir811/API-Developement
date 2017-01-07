@@ -70,4 +70,13 @@ class TopicController extends Controller
               ->toArray();
     }
 
+    public function destroy (Topic $topic)
+    {
+      $this->authorize('destroy', $topic);
+
+      $topic->posts()->delete();
+      $topic->delete();
+
+      return response(null, 204); //Response 204 mean successfull but with no content
+    }
 }
