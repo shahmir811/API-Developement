@@ -15,6 +15,11 @@ class PostPolicy
         return $user->ownsPost($post);
     }
 
+    public function destroy(User $user, Post $post)
+    {
+        return $user->ownsPost($post);
+    }
+
 
     public function __construct()
     {
