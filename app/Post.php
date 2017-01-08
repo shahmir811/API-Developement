@@ -2,8 +2,9 @@
 
 namespace App;
 
-use App\Topic;
 use App\User;
+use App\Like;
+use App\Topic;
 use App\Traits\Orderable;
 use Illuminate\Database\Eloquent\Model;
 
@@ -22,4 +23,10 @@ class Post extends Model
     {
       return $this->belongsTo(Topic::class);
     }
+
+    public function likes()
+    {
+        return $this->morphMany(Like::class, 'likeable');
+    }
+
 }
